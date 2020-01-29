@@ -3,7 +3,7 @@ from rasterio import features, Affine
 from shapely.geometry import Polygon, MultiPolygon, mapping
 from fiona.crs import from_epsg
 import numpy as np
-import tools
+from makesurface.scripts import tools
 from scipy.ndimage import zoom
 from scipy.ndimage.filters import median_filter, maximum_filter
 
@@ -74,17 +74,17 @@ def zoomSmooth(inArr, smoothing, inAffine):
     return inArr, oaff
 
 def vectorizeRaster(infile, outfile, classes, classfile, weight, nodata, smoothing, band, cartoCSS, axonometrize, nosimple, setNoData, nibbleMask, outvar):
-
-    with rasterio.drivers():
+    import rasterio.env
+    with rasterio.Env():
         with rasterio.open(infile, 'r') as src:
             try:
                 band = int(band)
             except:
                 raise ValueError('Band must be an integer')
 
-            inarr = src.read_band(band)
+            inarr = src.read(band)
             oshape = src.shape
-            oaff = src.affine
+            oaff = src.transform
 
             if (type(setNoData) == int or type(setNoData) == float) and hasattr(inarr, 'mask'):
                 inarr[np.where(inarr.mask == True)] = setNoData
