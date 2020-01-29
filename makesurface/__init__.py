@@ -1,4 +1,4 @@
-from scripts import vectorize_raster, triangulate_raster, fill_facets
+from makesurface.scripts import vectorize_raster, triangulate_raster, fill_facets
 
 def vectorize(infile, outfile, classes, classfile, weight, nodata, smoothing, bidx, cartoCSS, axonometrize, nosimple, setNoData, nibbleMask, outvar):
     vectorize_raster.vectorizeRaster(infile, outfile, classes, classfile, weight, nodata, smoothing, bidx, cartoCSS, axonometrize, nosimple, setNoData, nibbleMask, outvar)
