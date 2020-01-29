@@ -1,4 +1,5 @@
-import fiona, rasterio, mercantile, tools, json, click
+import fiona, rasterio, mercantile, json, click
+from makesurface.scripts import tools
 from rasterio import features, Affine, coords
 import numpy as np
 
@@ -42,9 +43,12 @@ def loadRaster(filePath, bands, bounds):
     """
 
     """
-    with rasterio.drivers():
+    # with rasterio.drivers():
+    import rasterio
+    import rasterio.env
+    with rasterio.Env():
         with rasterio.open(filePath,'r') as src:
-            oaff = src.affine
+            oaff = src.transform
             upperLeft = src.index(bounds.left, bounds.top)
             lowerRight = src.index(bounds.right, bounds.bottom)
             filler = np.zeros((lowerRight[0] - upperLeft[0], lowerRight[1] - upperLeft[1])) - 999
